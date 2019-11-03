@@ -1,27 +1,19 @@
 # AngularTodos
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.17.
+## Description
 
-## Development server
+Todo app of the garden variety. The app has 2 services.  One being a mock of the backend using just JavaScript and automatically resolved Promises.  The other service is actually hooked up to an api using AJAX. You can find the back end code [here](https://github.com/JasonBBelcher/todos-backend).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+You can find an online version on [codesandbox](https://codesandbox.io/s/angular-2c6v2?fontsize=14)
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+<iframe
+     src="https://codesandbox.io/embed/angular-2c6v2?fontsize=14"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="Angular"
+     allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+     sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+   ></iframe>
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
