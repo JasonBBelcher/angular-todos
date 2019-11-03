@@ -1,8 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Todo } from "./todo";
+import { ApiService } from './api.service';
+
+// This service mocks the backend.  
 
 @Injectable()
 export class RepositoryService {
+  constructor(private api: ApiService) {
+
+  }
   private todos: Array<Todo> = JSON.parse(localStorage.getItem("todos")) || [];
 
   createTodo(todotext) {
@@ -17,7 +23,7 @@ export class RepositoryService {
 
   updateTodo(todo) {
     const index = this.todos.findIndex(t => {
-      return t.id === todo.id;
+      return t._id === todo._id;
     });
 
     this.todos[index] = todo;
@@ -28,7 +34,7 @@ export class RepositoryService {
   }
 
   removeTodo(id) {
-    this.todos = this.todos.filter(todo => todo.id !== id);
+    this.todos = this.todos.filter(todo => todo._id !== id);
     localStorage.setItem("todos", JSON.stringify(this.todos));
     return Promise.resolve(this.todos);
   }

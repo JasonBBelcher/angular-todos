@@ -11,12 +11,11 @@
   </nav>
 
   <section>
-    <ul>
 
-      <app-todo-items [todos]="todos" (removed)="removeTodo($event)" (toggled)="toggleComplete($event)"
-        (priority)="changePriority($event)"></app-todo-items>
 
-    </ul>
+    <app-todo-items [todos]="todos" (removed)="removeTodo($event)" (toggled)="toggleComplete($event)"
+      (priority)="changePriority($event)"></app-todo-items>
+
   </section>
 
   <footer>
