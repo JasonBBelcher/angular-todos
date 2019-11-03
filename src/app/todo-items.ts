@@ -4,18 +4,20 @@ import { Todo } from './todo';
 @Component({
   selector: "app-todo-items",
   template: `
-  <li *ngFor="let todo of todos">
-       
-  <p class="todo-text" [class.completed]="todo.completed">
-  {{ todo.text }}
-  </p>
-  <span class="operators" (click)="onChangePriority('+', todo)">+</span>
-  <span class="operators" (click)="onChangePriority('-', todo)">-</span>
-  <p class="priority">priority: {{ todo.priority }}</p>
-  
-  <button (click)="onRemoveTodo(todo.id)">Remove</button>
-  <button (click)="onToggleComplete(todo)">Completed</button>
-  </li>
+  <ul>
+    <li *ngFor="let todo of todos">
+        
+    <p class="todo-text" [class.completed]="todo.completed">
+    {{ todo.text }}
+    </p>
+    <span class="operators" (click)="onChangePriority('+', todo)">+</span>
+    <span class="operators" (click)="onChangePriority('-', todo)">-</span>
+    <p class="priority">priority: {{ todo.priority }}</p>
+    
+    <button (click)="onRemoveTodo(todo._id)">Remove</button>
+    <button (click)="onToggleComplete(todo)">Completed</button>
+      </li>
+  </ul>
   `
 })
 export class TodoItemsComponent {

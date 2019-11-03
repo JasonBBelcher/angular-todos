@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { RepositoryService } from "./repository.service";
+import { ApiService } from './api.service';
+
 
 @Component({
   selector: "app-root",
@@ -9,18 +11,20 @@ import { RepositoryService } from "./repository.service";
 export class AppComponent implements OnInit {
   todos: any[];
 
-  constructor(private repository: RepositoryService) { }
+  constructor(private api: ApiService, private repository: RepositoryService) { }
 
   ngOnInit() {
-    this.repository.getTodos().then(todos => {
+    this.api.getTodos().then(todos => {
       this.todos = todos;
     });
   }
 
   addTodo(input) {
     if (input.value) {
-      this.repository.createTodo(input.value);
-      this.getTodos();
+      this.api.createTodo(input.value).then(() => {
+        this.getTodos();
+      })
+
       input.value = "";
     } else {
       return;
@@ -28,13 +32,13 @@ export class AppComponent implements OnInit {
   }
 
   clearTodos() {
-    this.repository.clearTodos().then(todos => {
-      this.todos = todos;
+    this.api.clearTodos().then(() => {
+      this.todos = [];
     });
   }
 
   getTodos() {
-    this.repository.getTodos().then(todos => {
+    this.api.getTodos().then(todos => {
       this.todos = todos;
     });
   }
@@ -49,21 +53,26 @@ export class AppComponent implements OnInit {
       }
     }
 
-    this.repository.updateTodo(event.todo);
+    this.api.updateTodo(event.todo).then(() => {
+      this.getTodos();
+    })
   }
 
   toggleComplete(todo) {
     todo.completed = !todo.completed;
-    this.repository.updateTodo(todo);
+    this.api.updateTodo(todo).then(() => {
+
+    })
   }
 
   removeTodo(id) {
-    this.repository.removeTodo(id).then(todos => {
-      this.todos = todos;
+    this.api.removeTodo(id).then(todos => {
+      this.getTodos();
     });
   }
 
   filterSearch(value) {
+
     if (value) {
       if (!isNaN(value)) {
         this.todos = this.todos.filter(
