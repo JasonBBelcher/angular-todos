@@ -3,13 +3,13 @@ import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
 import { RepositoryService } from "./repository.service";
-import { TodoItemComponent } from "./todo-item";
+import { TodoItemsComponent } from "./todo-items";
 
 
 @NgModule({
-  declarations: [AppComponent, TodoItemComponent],
+  declarations: [AppComponent, TodoItemsComponent],
   imports: [BrowserModule],
   providers: [RepositoryService],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

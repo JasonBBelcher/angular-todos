@@ -1,7 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { RepositoryService } from "./repository.service";
-import { Observable } from "rxjs";
-import { filter, flatMap } from "rxjs/operators";
 
 @Component({
   selector: "app-root",
@@ -9,12 +7,14 @@ import { filter, flatMap } from "rxjs/operators";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-  todos: Observable<any[]>;
+  todos: any[];
 
-  constructor(private repository: RepositoryService) {}
+  constructor(private repository: RepositoryService) { }
 
   ngOnInit() {
-    this.todos = this.repository.getTodos();
+    this.repository.getTodos().then(todos => {
+      this.todos = todos;
+    });
   }
 
   addTodo(input) {
@@ -28,11 +28,15 @@ export class AppComponent implements OnInit {
   }
 
   clearTodos() {
-    this.todos = this.repository.clearTodos();
+    this.repository.clearTodos().then(todos => {
+      this.todos = todos;
+    });
   }
 
   getTodos() {
-    this.todos = this.repository.getTodos();
+    this.repository.getTodos().then(todos => {
+      this.todos = todos;
+    });
   }
 
   changePriority(event) {
@@ -45,39 +49,33 @@ export class AppComponent implements OnInit {
       }
     }
 
-    return (this.todos = this.repository.updateTodo(event.todo));
+    this.repository.updateTodo(event.todo);
   }
 
   toggleComplete(todo) {
     todo.completed = !todo.completed;
-    return (this.todos = this.repository.updateTodo(todo));
+    this.repository.updateTodo(todo);
   }
 
   removeTodo(id) {
-    this.todos = this.repository.removeTodo(id);
+    this.repository.removeTodo(id).then(todos => {
+      this.todos = todos;
+    });
   }
 
   filterSearch(value) {
     if (value) {
       if (!isNaN(value)) {
-        this.todos = this.todos.pipe(
-          flatMap(todos => {
-            return todos.filter(
-              todo => parseInt(todo.priority, 10) === parseInt(value, 10)
-            );
-          })
+        this.todos = this.todos.filter(
+          todo => parseInt(todo.priority, 10) === parseInt(value, 10)
         );
       } else if (typeof value === "string") {
-        this.todos = this.todos.pipe(
-          flatMap(todos => {
-            return todos.filter(todo => {
-              return todo.text.toLowerCase().indexOf(value.toLowerCase()) > -1;
-            });
-          })
-        );
+        this.todos = this.todos.filter(todo => {
+          return todo.text.toLowerCase().indexOf(value.toLowerCase()) > -1;
+        });
       }
     } else {
-      this.todos = this.repository.getTodos();
+      this.getTodos();
     }
   }
 }

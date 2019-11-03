@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { Todo } from "./todo";
-import { Observable, of } from "rxjs";
 
 @Injectable()
 export class RepositoryService {
@@ -13,7 +12,7 @@ export class RepositoryService {
   }
 
   getTodos() {
-    return of(this.todos);
+    return Promise.resolve(this.todos);
   }
 
   updateTodo(todo) {
@@ -25,17 +24,17 @@ export class RepositoryService {
 
     localStorage.setItem("todos", JSON.stringify(this.todos));
 
-    return of(this.todos);
+    return Promise.resolve(this.todos);
   }
 
   removeTodo(id) {
     this.todos = this.todos.filter(todo => todo.id !== id);
     localStorage.setItem("todos", JSON.stringify(this.todos));
-    return of(this.todos);
+    return Promise.resolve(this.todos);
   }
 
   clearTodos() {
     localStorage.removeItem("todos");
-    return of([]);
+    return Promise.resolve((this.todos = []));
   }
 }

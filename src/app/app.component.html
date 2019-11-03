@@ -4,33 +4,18 @@
   </header>
 
   <nav class="add-todo">
-    <input
-      class="todo-input"
-      #inputvalue
-      (keyup.enter)="addTodo(inputvalue)"
-      type="text"
-      placeholder="Add a todo"
-    />
+    <input class="todo-input" #inputvalue (keyup.enter)="addTodo(inputvalue)" type="text" placeholder="Add a todo" />
     <button (click)="addTodo(inputvalue)">Add Todo</button>
-    <input
-      class="todo-input"
-      (keyup)="filterSearch($event.target.value)"
-      placeholder="search your todos"
-      type="text"
-    />
+    <input class="todo-input" (keyup)="filterSearch($event.target.value)" placeholder="search your todos" type="text" />
     <button (click)="clearTodos()">Clear</button>
   </nav>
 
   <section>
     <ul>
-      <li *ngFor="let todo of todos | async">
-        <app-todo-item
-          todo="todo"
-          (removed)="removeTodo($event)"
-          (toggled)="toggleComplete($event)"
-          (priority)="changePriority($event)"
-        ></app-todo-item>
-      </li>
+
+      <app-todo-items [todos]="todos" (removed)="removeTodo($event)" (toggled)="toggleComplete($event)"
+        (priority)="changePriority($event)"></app-todo-items>
+
     </ul>
   </section>
 
