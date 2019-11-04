@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Todo } from './todo';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,23 +13,23 @@ export class ApiService {
     this.URL = `http://localhost:8080`;
   }
 
-  getTodos(): Promise<any> {
-    return this.http.get(`${this.URL}/todos`).toPromise();
+  getTodos(): Observable<any> {
+    return this.http.get(`${this.URL}/todos`);
   }
 
-  createTodo(text: string): Promise<any> {
-    return this.http.post(`${this.URL}/todo`, { text, completed: false, priority: 0 }).toPromise();
+  createTodo(text: string): Observable<any> {
+    return this.http.post(`${this.URL}/todo`, { text, completed: false, priority: 0 });
   }
 
-  clearTodos(): Promise<any> {
-    return this.http.delete(`${this.URL}/todos`).toPromise();
+  clearTodos(): Observable<any> {
+    return this.http.delete(`${this.URL}/todos`);
   }
 
-  updateTodo(todo: Todo): Promise<any> {
-    return this.http.put(`${this.URL}/todo/${todo._id}`, todo).toPromise();
+  updateTodo(todo: Todo): Observable<any> {
+    return this.http.put(`${this.URL}/todo/${todo._id}`, todo);
   }
 
-  removeTodo(id: number): Promise<any> {
-    return this.http.delete(`${this.URL}/todo/${id}`).toPromise();
+  removeTodo(id: number): Observable<any> {
+    return this.http.delete(`${this.URL}/todo/${id}`);
   }
 }

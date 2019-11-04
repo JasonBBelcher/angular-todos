@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { RepositoryService } from "./repository.service";
 import { ApiService } from './api.service';
-
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: "app-root",
@@ -9,19 +10,17 @@ import { ApiService } from './api.service';
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-  todos: any[];
+  todos$: Observable<any[]>
 
   constructor(private api: ApiService, private repository: RepositoryService) { }
 
   ngOnInit() {
-    this.api.getTodos().then(todos => {
-      this.todos = todos;
-    });
+    this.todos$ = this.api.getTodos();
   }
 
   addTodo(input) {
     if (input.value) {
-      this.api.createTodo(input.value).then(() => {
+      this.api.createTodo(input.value).subscribe(() => {
         this.getTodos();
       })
 
@@ -32,15 +31,13 @@ export class AppComponent implements OnInit {
   }
 
   clearTodos() {
-    this.api.clearTodos().then(() => {
-      this.todos = [];
+    this.api.clearTodos().subscribe(() => {
+      this.todos$ = of([]);
     });
   }
 
   getTodos() {
-    this.api.getTodos().then(todos => {
-      this.todos = todos;
-    });
+    this.todos$ = this.api.getTodos();
   }
 
   changePriority(event) {
@@ -53,20 +50,16 @@ export class AppComponent implements OnInit {
       }
     }
 
-    this.api.updateTodo(event.todo).then(() => {
-      this.getTodos();
-    })
+    this.api.updateTodo(event.todo).subscribe(() => { })
   }
 
   toggleComplete(todo) {
     todo.completed = !todo.completed;
-    this.api.updateTodo(todo).then(() => {
-
-    })
+    this.api.updateTodo(todo).subscribe(() => { })
   }
 
   removeTodo(id) {
-    this.api.removeTodo(id).then(todos => {
+    this.api.removeTodo(id).subscribe(() => {
       this.getTodos();
     });
   }
@@ -75,13 +68,17 @@ export class AppComponent implements OnInit {
 
     if (value) {
       if (!isNaN(value)) {
-        this.todos = this.todos.filter(
-          todo => parseInt(todo.priority, 10) === parseInt(value, 10)
-        );
+        this.todos$ = this.todos$.pipe(map((todos) => {
+          return todos.filter(
+            todo => parseInt(todo.priority, 10) === parseInt(value, 10)
+          );
+        }))
       } else if (typeof value === "string") {
-        this.todos = this.todos.filter(todo => {
-          return todo.text.toLowerCase().indexOf(value.toLowerCase()) > -1;
-        });
+        this.todos$ = this.todos$.pipe(map((todos) => {
+          return todos.filter(todo => {
+            return todo.text.toLowerCase().indexOf(value.toLowerCase()) > -1;
+          });
+        }))
       }
     } else {
       this.getTodos();
