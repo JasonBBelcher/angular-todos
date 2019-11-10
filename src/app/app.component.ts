@@ -20,7 +20,9 @@ export class AppComponent implements OnInit {
 
   addTodo(input) {
     if (input.value) {
-      this.repository.createTodo(input.value);
+      this.repository
+        .createTodo(input.value)
+        .catch((err) => alert(JSON.stringify(err)));
       this.getTodos();
       input.value = "";
     } else {
@@ -29,34 +31,47 @@ export class AppComponent implements OnInit {
   }
 
   clearTodos() {
-    this.repository.clearTodos().then((todos) => {
-      this.todos = todos;
-    });
+    this.repository
+      .clearTodos()
+      .then((todos) => {
+        this.todos = todos;
+      })
+      .catch((err) => alert(JSON.stringify(err)));
   }
 
   getTodos() {
-    this.repository.getTodos().then((todos) => {
-      this.todos = todos;
-    });
+    this.repository
+      .getTodos()
+      .then((todos) => {
+        this.todos = todos;
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err));
+      });
   }
 
   changePriority(event) {
     this.repository.changePriority(event);
-    this.repository.updateTodo(event.todo);
+    this.repository
+      .updateTodo(event.todo)
+      .catch((err) => alert(JSON.stringify(err)));
   }
 
   toggleComplete(todo) {
     todo.completed = !todo.completed;
-    this.repository.updateTodo(todo);
+    this.repository.updateTodo(todo).catch((err) => alert(JSON.stringify(err)));
   }
 
   removeTodo(id) {
-    this.repository.removeTodo(id).then((todo) => {
-      const filtered = this.todos.filter((t) => {
-        return t.uid !== todo.uid;
-      });
-      this.todos = filtered;
-    });
+    this.repository
+      .removeTodo(id)
+      .then((todo) => {
+        const filtered = this.todos.filter((t) => {
+          return t.uid !== todo.uid;
+        });
+        this.todos = filtered;
+      })
+      .catch((err) => alert(JSON.stringify(err)));
   }
 
   filterSearch(value) {

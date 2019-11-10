@@ -5,8 +5,7 @@ import { HttpClient } from "@angular/common/http";
 @Injectable()
 export class RepositoryService {
   private URL: string;
-  private todos: Array<Todo<string, boolean, string>> =
-    JSON.parse(localStorage.getItem("todos")) || [];
+  private todos: Array<Todo<string, boolean, string>> = [];
   private filteredTodos: Array<Todo<string, boolean, string>>;
 
   constructor(private http: HttpClient) {
@@ -14,7 +13,6 @@ export class RepositoryService {
   }
   createTodo(text: string): Promise<any> {
     const todo = new Todo(text, false, 0);
-    console.log(todo);
     return this.http.post(`${this.URL}/todo`, todo).toPromise();
   }
 
@@ -69,8 +67,7 @@ export class RepositoryService {
     return Promise.resolve();
   }
 
-  clearTodos() {
-    localStorage.removeItem("todos");
-    return Promise.resolve((this.todos = []));
+  clearTodos(): Promise<any> {
+    return this.http.delete(`${this.URL}/todos`).toPromise();
   }
 }
