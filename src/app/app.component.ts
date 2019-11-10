@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { RepositoryService } from "./repository.service";
-import { ApiService } from './api.service';
-
+import { Todo } from "./todo";
 
 @Component({
   selector: "app-root",
@@ -9,22 +8,20 @@ import { ApiService } from './api.service';
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-  todos: any[];
+  todos: Todo<string, boolean, string>[];
 
-  constructor(private api: ApiService, private repository: RepositoryService) { }
+  constructor(private repository: RepositoryService) {}
 
   ngOnInit() {
-    this.api.getTodos().then(todos => {
+    this.repository.getTodos().then((todos) => {
       this.todos = todos;
     });
   }
 
   addTodo(input) {
     if (input.value) {
-      this.api.createTodo(input.value).then(() => {
-        this.getTodos();
-      })
-
+      this.repository.createTodo(input.value);
+      this.getTodos();
       input.value = "";
     } else {
       return;
@@ -32,59 +29,47 @@ export class AppComponent implements OnInit {
   }
 
   clearTodos() {
-    this.api.clearTodos().then(() => {
-      this.todos = [];
+    this.repository.clearTodos().then((todos) => {
+      this.todos = todos;
     });
   }
 
   getTodos() {
-    this.api.getTodos().then(todos => {
+    this.repository.getTodos().then((todos) => {
       this.todos = todos;
     });
   }
 
   changePriority(event) {
-    if (event.operation === "+") {
-      event.todo.priority += 1;
-    }
-    if (event.operation === "-") {
-      if (event.todo.priority > 0) {
-        event.todo.priority -= 1;
-      }
-    }
-
-    this.api.updateTodo(event.todo).then(() => {
-      this.getTodos();
-    })
+    this.repository.changePriority(event);
+    this.repository.updateTodo(event.todo);
   }
 
   toggleComplete(todo) {
     todo.completed = !todo.completed;
-    this.api.updateTodo(todo).then(() => {
-
-    })
+    this.repository.updateTodo(todo);
   }
 
   removeTodo(id) {
-    this.api.removeTodo(id).then(todos => {
-      this.getTodos();
+    this.repository.removeTodo(id).then((todo) => {
+      const filtered = this.todos.filter((t) => {
+        return t.uid !== todo.uid;
+      });
+      this.todos = filtered;
     });
   }
 
   filterSearch(value) {
-
-    if (value) {
-      if (!isNaN(value)) {
-        this.todos = this.todos.filter(
-          todo => parseInt(todo.priority, 10) === parseInt(value, 10)
-        );
-      } else if (typeof value === "string") {
-        this.todos = this.todos.filter(todo => {
-          return todo.text.toLowerCase().indexOf(value.toLowerCase()) > -1;
-        });
-      }
+    if (!value) {
+      this.repository.getTodos().then((todos) => {
+        this.todos = todos;
+      });
     } else {
-      this.getTodos();
+      this.repository.filterSearch(value).then(() => {
+        this.repository.getFilteredTodos().then((todos) => {
+          this.todos = todos;
+        });
+      });
     }
   }
 }

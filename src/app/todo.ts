@@ -1,13 +1,17 @@
-export class Todo {
-  _id: number;
-  text: string;
-  completed: boolean;
-  priority: number;
+export class Todo<T, U, V> {
+  uid: number;
+  text: T;
+  completed: U;
+  priority: V;
 
-  constructor(_id, text, completed, priority) {
-    this._id = _id;
+  constructor(text, completed, priority) {
+    this.uid = this.genId();
     this.text = text;
     this.completed = completed;
     this.priority = priority;
+  }
+
+  genId(): number {
+    return Math.random() * 10;
   }
 }
